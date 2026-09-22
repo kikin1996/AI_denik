@@ -42,12 +42,11 @@ poslat přes WhatsApp a automaticky se přiřadí k dnešnímu zápisu.
 
 Nastav `ANTHROPIC_API_KEY` a/nebo `OPENAI_API_KEY` a zvol `AI_PROVIDER` (`anthropic` | `openai`).
 
-### 5. Cron (spouštění večerních hovorů)
+### 5. Spouštění večerních hovorů
 
-`vercel.json` definuje hodinovou cron úlohu volající `/api/cron/trigger-calls`. Na Vercelu stačí
-nastavit env proměnnou `CRON_SECRET` — Vercel ji automaticky pošle jako
-`Authorization: Bearer $CRON_SECRET`. Mimo Vercel spouštěj stejný endpoint hodinově vlastním
-schedulerem (Supabase Edge Function + `pg_cron`, GitHub Actions, apod.) se stejnou hlavičkou.
+Scheduling řeší externí systém (mimo tento repo) — hodinově volá
+`GET /api/cron/trigger-calls` s hlavičkou `Authorization: Bearer $CRON_SECRET`. Endpoint si sám
+podle `preferred_call_time` a časového pásma vybere uživatele, kterým má v danou hodinu zavolat.
 
 ### 6. Lokální vývoj
 
