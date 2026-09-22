@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Palette grounded in the product's actual ritual: an evening call at dusk.
+  Light mode reads as paper under a fading indigo sky; dark mode flips the
+  emphasis to the warm lamp-glow amber that the call itself evokes.
+*/
+@layer base {
+  :root {
+    --background: 260 14% 96%;
+    --foreground: 250 14% 14%;
+
+    --card: 260 18% 99%;
+    --card-foreground: 250 14% 14%;
+
+    --primary: 248 35% 24%;
+    --primary-foreground: 45 32% 96%;
+
+    --secondary: 255 15% 91%;
+    --secondary-foreground: 250 14% 16%;
+
+    --muted: 255 13% 92%;
+    --muted-foreground: 250 8% 45%;
+
+    --accent: 38 68% 58%;
+    --accent-foreground: 250 25% 14%;
+
+    --destructive: 354 58% 46%;
+    --destructive-foreground: 45 30% 97%;
+
+    --border: 255 13% 87%;
+    --input: 255 13% 87%;
+    --ring: 248 35% 40%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 250 24% 9%;
+    --foreground: 45 22% 92%;
+
+    --card: 250 22% 12%;
+    --card-foreground: 45 22% 92%;
+
+    --primary: 38 68% 58%;
+    --primary-foreground: 250 30% 12%;
+
+    --secondary: 250 15% 17%;
+    --secondary-foreground: 45 22% 92%;
+
+    --muted: 250 15% 17%;
+    --muted-foreground: 250 10% 65%;
+
+    --accent: 248 35% 48%;
+    --accent-foreground: 45 25% 95%;
+
+    --destructive: 354 55% 50%;
+    --destructive-foreground: 45 25% 95%;
+
+    --border: 250 15% 21%;
+    --input: 250 15% 21%;
+    --ring: 38 68% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
