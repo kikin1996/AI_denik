@@ -1,4 +1,5 @@
 export type CallStatus = "initiated" | "ringing" | "in-progress" | "completed" | "failed" | "no-answer";
+export type PushPlatform = "ios" | "android";
 
 export interface Database {
   public: {
@@ -121,6 +122,41 @@ export interface Database {
           },
         ];
       };
+      push_tokens: {
+        Row: {
+          id: string;
+          user_id: string;
+          platform: PushPlatform;
+          voip_token: string | null;
+          device_push_token: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          platform: PushPlatform;
+          voip_token?: string | null;
+          device_push_token?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          platform?: PushPlatform;
+          voip_token?: string | null;
+          device_push_token?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "push_tokens_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -132,3 +168,4 @@ export interface Database {
 export type UserRow = Database["public"]["Tables"]["users"]["Row"];
 export type JournalEntryRow = Database["public"]["Tables"]["journal_entries"]["Row"];
 export type CallLogRow = Database["public"]["Tables"]["call_logs"]["Row"];
+export type PushTokenRow = Database["public"]["Tables"]["push_tokens"]["Row"];

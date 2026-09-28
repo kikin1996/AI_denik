@@ -84,3 +84,12 @@ supabase/schema.sql                  # DB schéma + RLS
 - Webhooky a cron používají Supabase **service role** klienta (`createAdminClient`), který obchází
   RLS — proto ověřují `VAPI_WEBHOOK_SECRET` / `CRON_SECRET` před zpracováním požadavku.
 - RLS politiky zajišťují, že uživatel vidí a upravuje pouze svoje vlastní zápisy a profil.
+
+## Mobilní appka (iOS/Android)
+
+[`mobile/`](mobile/) je Expo/React Native appka se stejným Supabase projektem — hovor tam ale
+neprobíhá přes Vapi telefonát, ale jako in-app VoIP hovor (CallKit + OpenAI Realtime API přes
+WebRTC), který appku "prozvoní" jako hovor přes WhatsApp. Backend pro ni (`/api/realtime/session`,
+`/api/mobile/*`, `/api/cron/trigger-voip-calls`) žije přímo v této webové appce — viz
+[`mobile/README.md`](mobile/README.md) pro nastavení a stav rozpracovanosti (jeden nutný ruční
+nativní krok, zatím neověřený build na skutečném Macu).

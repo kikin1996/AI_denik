@@ -34,6 +34,59 @@ export async function createClient() {
 }
 
 /**
+ * Stateless client for the mobile app's bearer-token requests (no cookies —
+ * the Expo app sends `Authorization: Bearer <supabase_access_token>`
+ * instead). Respects RLS as that user, same as the cookie-based client.
+ */
+export function createClientForToken(accessToken: string) {
+  return createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      global: {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+      cookies: {
+        getAll() {
+          return [];
+        },
+        setAll() {
+          // no-op: stateless bearer-token requests have no cookie jar
+        },
+      },
+    }
+  );
+}
+
+/**
+ * Verifies a Supabase access token from an `Authorization: Bearer` header
+ * (used by the mobile app's API routes) and returns the matching row in
+ * public.users, or null if the token is missing/invalid or has no profile.
+ */
+export async function getMobileUser(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  const token = authHeader?.replace(/^Bearer\s+/i, "");
+  if (!token) return null;
+
+  const supabase = createClientForToken(token);
+  const {
+    data: { user: authUser },
+    error,
+  } = await supabase.auth.getUser(token);
+  if (error || !authUser) return null;
+
+  const { data: profile } = await supabase
+    .from("users")
+    .select("*")
+    .eq("auth_user_id", authUser.id)
+    .maybeSingle();
+
+  if (!profile) return null;
+
+  return { supabase, profile };
+}
+
+/**
  * Service-role client that bypasses RLS. Only for trusted server contexts:
  * webhooks (Vapi/WhatsApp) and cron jobs that act on behalf of many users.
  * NEVER expose this client or the service role key to the browser.
