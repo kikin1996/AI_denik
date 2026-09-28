@@ -24,7 +24,7 @@ export default async function DashboardPage() {
     <main className="min-h-screen bg-background">
       <header className="border-b border-border">
         <div className="container flex items-center justify-between py-5">
-          <span className="font-display text-lg">AI Deník</span>
+          <span className="font-display text-lg">DayStory</span>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/dashboard/settings">
               <Settings className="mr-2 h-4 w-4" />

@@ -23,7 +23,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
       },
     });
 
@@ -40,7 +40,7 @@ export default function LoginPage() {
     <main className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
         <Link href="/" className="font-display text-lg text-muted-foreground">
-          AI Deník
+          DayStory
         </Link>
 
         <h1 className="mt-6 font-display text-3xl leading-tight">Přihlas se ke svému deníku</h1>

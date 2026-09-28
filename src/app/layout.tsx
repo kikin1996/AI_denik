@@ -15,7 +15,7 @@ const plexSans = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "AI Deník",
+  title: "DayStory",
   description: "Tvůj hlasový AI deník přes WhatsApp a telefonní hovory.",
 };
 

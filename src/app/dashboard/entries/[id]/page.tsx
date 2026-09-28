@@ -48,7 +48,7 @@ export default async function JournalEntryDetailPage({
               <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
-          <span className="font-display text-lg">AI Deník</span>
+          <span className="font-display text-lg">DayStory</span>
         </div>
       </header>
 

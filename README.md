@@ -1,4 +1,4 @@
-# AI Deník
+# DayStory
 
 Hlasový/WhatsApp AI deník: každý večer AI agent zavolá uživateli přes Vapi, hovor se přepíše a
 promění ve strukturovaný deníkový zápis (shrnutí, nálada, témata). Fotky a dodatečné poznámky lze

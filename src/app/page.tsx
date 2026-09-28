@@ -51,7 +51,7 @@ export default function HomePage() {
         />
 
         <div className="container relative max-w-3xl py-20 sm:py-28">
-          <p className="mb-5 text-sm text-primary-foreground/70">AI Deník</p>
+          <p className="mb-5 text-sm text-primary-foreground/70">DayStory</p>
 
           <h1 className="max-w-xl font-display text-4xl leading-[1.1] sm:text-5xl">
             Jaký byl dnešně tvůj den?

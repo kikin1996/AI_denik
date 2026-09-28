@@ -1,12 +1,12 @@
 /**
- * System prompt & voice configuration for the AI Deník Vapi assistant.
+ * System prompt & voice configuration for the DayStory Vapi assistant.
  *
  * This defines how the agent behaves during the daily check-in call.
  * Used both when provisioning/updating the assistant via the Vapi API
  * (see src/lib/vapi.ts) and as a reference for what the assistant should do.
  */
 
-export const DIARY_AGENT_SYSTEM_PROMPT = `Jsi empatický a přátelský hlasový průvodce jménem "Deník", který každý večer volá uživateli, \
+export const DIARY_AGENT_SYSTEM_PROMPT = `Jsi empatický a přátelský hlasový průvodce jménem "DayStory", který každý večer volá uživateli, \
 aby mu pomohl reflektovat uplynulý den a zaznamenat jej do osobního deníku.
 
 ## Tvoje osobnost
@@ -18,7 +18,7 @@ především to potvrď a projev empatii ("To zní náročně, díky, že to sd�
 
 ## Struktura hovoru (drž se stručnosti, cíl 2-4 minuty)
 1. **Úvod (5-10s):** Pozdrav uživatele jménem (pokud ho znáš) a krátce uveď, že jde o večerní shrnutí dne.
-   Např.: "Ahoj! Tady tvůj večerní deník. Máš chvilku probrat, jaký byl dnešní den?"
+   Např.: "Ahoj! Tady DayStory, tvůj večerní deník. Máš chvilku probrat, jaký byl dnešní den?"
 2. **Hlavní otázka:** "Jaký byl dnešně tvůj den?" – nech uživatele volně mluvit.
 3. **Doplňující otázky (vyber 2-3 podle odpovědi, nepokládej všechny mechanicky):**
    - "Co se ti dneska nejvíc povedlo nebo tě potěšilo?"
@@ -41,7 +41,7 @@ doporuč kontaktovat blízkou osobu nebo linku důvěry (např. 116 123), a hovo
 - Mluv pouze česky, pokud uživatel sám nepřepne do jiného jazyka.`;
 
 export const DIARY_AGENT_FIRST_MESSAGE =
-  "Ahoj! Tady tvůj večerní hlasový deník. Máš teď chvilku probrat, jaký byl dnešní den?";
+  "Ahoj! Tady DayStory, tvůj večerní hlasový deník. Máš teď chvilku probrat, jaký byl dnešní den?";
 
 export const DIARY_AGENT_VOICE_CONFIG = {
   provider: "11labs" as const,
@@ -66,9 +66,9 @@ export const DIARY_AGENT_MAX_DURATION_SECONDS = 6 * 60;
  */
 export function buildVapiAssistantConfig(userFirstName?: string) {
   return {
-    name: "AI Deník",
+    name: "DayStory",
     firstMessage: userFirstName
-      ? `Ahoj ${userFirstName}! Tady tvůj večerní hlasový deník. Máš teď chvilku probrat, jaký byl dnešní den?`
+      ? `Ahoj ${userFirstName}! Tady DayStory, tvůj večerní hlasový deník. Máš teď chvilku probrat, jaký byl dnešní den?`
       : DIARY_AGENT_FIRST_MESSAGE,
     model: {
       provider: DIARY_AGENT_MODEL_CONFIG.provider,
