@@ -89,11 +89,25 @@ Každý zápis s nahrávkou hovoru může mít tlačítko „Připravit podklady
 Spustí `src/lib/reels.ts`, které z přepisu vybere 3-5 nejlepších vět **uživatele** (ne AI agenta),
 namatchuje je na reálný čas v nahrávce (z `transcript_messages`, timestampovaný přepis z
 `artifact.transcript` ve Vapi webhooku) a navrhne úvodní titulek. Nic se negeneruje — jen vybírá,
-co už bylo řečeno. Samotné stříhání (nahrávka + fotky z WhatsApp + titulky) je zatím samostatný,
-člověkem spouštěný krok (requestni v Claude Code session: „udělej reels z [datum]").
+co už bylo řečeno.
+
+Samotné stříhání (nahrávka + fotky/videa z WhatsApp + titulky) dělá `scripts/make-reel.mjs` -
+lokální Node skript (ffmpeg přes `ffmpeg-static`, žádné další služby), spouští se ručně:
+
+```bash
+node scripts/make-reel.mjs 2026-10-20
+node scripts/make-reel.mjs 2026-10-20 --user +420123456789   # víc uživatelů v appce
+node scripts/make-reel.mjs 2026-10-20 --out out/muj-den.mp4  # vlastní cesta výstupu
+```
+
+Postaví: tichou úvodní kartu s navrženým titulkem, pak pro každý soundbite klip s přesně
+vystřiženým úsekem nahrávky jako zvukem, fotkou/videem z `media_urls` jako b-rollem (cyklicky,
+jemný Ken Burns zoom u fotek) a titulkem z textu soundbitu, a všechno slepí do jednoho MP4 v
+`out/`. Bez médií appka použije jednolitou značkovou kartu, jen s titulkem (fail-open). Nic se
+automaticky nepublikuje - přehraj a over výstup, než ho kamkoli nahraješ.
 
 Pozor: `transcript_messages` se ukládá jen u hovorů **po** nasazení této funkce — starší zápisy
-nemají přesné časování a soundbity se vybírají jen z textu.
+nemají přesné časování a skript odmítne stříhat nahrávku bez něj (soundbity by se musely hádat).
 
 ## Bezpečnostní poznámky
 

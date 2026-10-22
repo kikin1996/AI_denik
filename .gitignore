@@ -49,3 +49,5 @@ CLAUDE.md
 .env*.local
 !.env.example
 !**/.env.example
+
+.env*
