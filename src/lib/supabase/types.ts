@@ -1,6 +1,8 @@
 export type CallStatus = "initiated" | "ringing" | "in-progress" | "completed" | "failed" | "no-answer";
 export type PushPlatform = "ios" | "android";
 
+export type Json = string | number | boolean | null | { [key: string]: Json } | Json[];
+
 export interface Database {
   public: {
     Tables: {
@@ -49,6 +51,8 @@ export interface Database {
           tags: string[] | null;
           media_urls: string[] | null;
           audio_url: string | null;
+          transcript_messages: Json | null;
+          reel_plan: Json | null;
           created_at: string;
         };
         Insert: {
@@ -62,6 +66,8 @@ export interface Database {
           tags?: string[] | null;
           media_urls?: string[] | null;
           audio_url?: string | null;
+          transcript_messages?: Json | null;
+          reel_plan?: Json | null;
           created_at?: string;
         };
         Update: {
@@ -75,6 +81,8 @@ export interface Database {
           tags?: string[] | null;
           media_urls?: string[] | null;
           audio_url?: string | null;
+          transcript_messages?: Json | null;
+          reel_plan?: Json | null;
           created_at?: string;
         };
         Relationships: [

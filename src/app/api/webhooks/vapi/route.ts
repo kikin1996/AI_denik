@@ -2,11 +2,18 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { analyzeJournalTranscript } from "@/lib/ai";
 import { createAdminClient } from "@/lib/supabase/server";
-import type { CallStatus } from "@/lib/supabase/types";
+import type { CallStatus, Json } from "@/lib/supabase/types";
 import { verifyVapiWebhookSecret } from "@/lib/vapi";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+interface VapiTranscriptMessage {
+  role: "assistant" | "user" | string;
+  message: string;
+  /** Seconds from the start of the call. */
+  time: number;
+}
 
 interface VapiMessagePayload {
   message: {
@@ -18,7 +25,12 @@ interface VapiMessagePayload {
     };
     transcript?: string;
     artifact?: {
-      transcript?: string;
+      // Despite the shared name, this is NOT the flat transcript string —
+      // it's the timestamped per-utterance array. The flat string lives at
+      // message.transcript (and message.artifact.transcript is confusingly
+      // reused for both shapes across Vapi's docs; we only ever read the
+      // array shape here). https://docs.vapi.ai/assistants/call-recording
+      transcript?: VapiTranscriptMessage[];
       recordingUrl?: string;
     };
     recordingUrl?: string;
@@ -63,7 +75,8 @@ export async function POST(request: NextRequest) {
 
   const callId = message.call?.id;
   const customerNumber = message.call?.customer?.number;
-  const transcript = message.transcript || message.artifact?.transcript || "";
+  const transcript = message.transcript ?? "";
+  const transcriptMessages = message.artifact?.transcript ?? null;
   const recordingUrl = message.recordingUrl || message.artifact?.recordingUrl || null;
   const durationSeconds = message.durationSeconds ?? null;
 
@@ -124,6 +137,7 @@ export async function POST(request: NextRequest) {
         key_events: analysis.key_events,
         tags: analysis.tags,
         audio_url: recordingUrl,
+        transcript_messages: transcriptMessages as unknown as Json,
       },
       { onConflict: "user_id,date" }
     );

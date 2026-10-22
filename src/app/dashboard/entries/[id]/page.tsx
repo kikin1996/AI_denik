@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getOrCreateUserProfile } from "@/lib/user";
 import { moodColor, moodLabel } from "@/lib/mood";
 import { Button } from "@/components/ui/button";
+import { ReelPlanSection } from "@/components/reel-plan-section";
+import type { ReelPlan } from "@/lib/reels";
 
 export default async function JournalEntryDetailPage({
   params,
@@ -126,6 +128,14 @@ export default async function JournalEntryDetailPage({
                   {entry.raw_transcript}
                 </p>
               </div>
+            )}
+
+            {entry.audio_url && (
+              <ReelPlanSection
+                entryId={entry.id}
+                entryDate={rest}
+                initialPlan={(entry.reel_plan as unknown as ReelPlan | null) ?? null}
+              />
             )}
           </div>
         </div>

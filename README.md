@@ -18,7 +18,8 @@ poslat přes WhatsApp a automaticky se přiřadí k dnešnímu zápisu.
 
 1. Vytvoř nový projekt na [supabase.com](https://supabase.com).
 2. V SQL editoru spusť [`supabase/schema.sql`](supabase/schema.sql) — vytvoří tabulky `users`,
-   `journal_entries`, `call_logs`, RLS politiky a storage bucket `journal-media`.
+   `journal_entries`, `call_logs`, RLS politiky a storage bucket `journal-media`. Pak spusť i
+   [`supabase/reels-schema.sql`](supabase/reels-schema.sql) (podklady pro Reels, viz níže).
 3. Zapni Email OTP (magic link) v Authentication → Providers.
 4. Zkopíruj `Project URL`, `anon key` a `service_role key` do `.env.local`.
 
@@ -66,18 +67,33 @@ src/
     api/cron/trigger-calls/route.ts  # hodinově spouští odchozí hovory
     auth/callback/route.ts           # dokončení magic-link přihlášení
     dashboard/page.tsx               # timeline zápisů
-    dashboard/entries/[id]/page.tsx  # detail zápisu (audio + přepis)
+    dashboard/entries/[id]/page.tsx  # detail zápisu (audio + přepis + podklady pro Reels)
     dashboard/settings/page.tsx      # telefon, čas hovoru, časové pásmo
+    api/dashboard/entries/[id]/reel-plan/route.ts  # AI výběr soundbitů pro Reels
     login/page.tsx
-  components/                        # journal-card, settings-form, ui/*
+  components/                        # journal-card, settings-form, reel-plan-section, ui/*
   config/vapi-agent-prompt.ts        # systémový prompt a konfigurace hlasového agenta
   lib/
     supabase/{client,server,types}.ts
     vapi.ts                          # Vapi API klient
     ai.ts                            # analýza přepisu (Anthropic/OpenAI)
+    reels.ts                         # AI výběr soundbitů + návrh titulku pro Reels
     user.ts                          # profil přihlášeného uživatele
 supabase/schema.sql                  # DB schéma + RLS
+supabase/reels-schema.sql            # + transcript_messages, reel_plan sloupce
 ```
+
+## Reels z deníkového zápisu
+
+Každý zápis s nahrávkou hovoru může mít tlačítko „Připravit podklady pro Reels" (detail zápisu).
+Spustí `src/lib/reels.ts`, které z přepisu vybere 3-5 nejlepších vět **uživatele** (ne AI agenta),
+namatchuje je na reálný čas v nahrávce (z `transcript_messages`, timestampovaný přepis z
+`artifact.transcript` ve Vapi webhooku) a navrhne úvodní titulek. Nic se negeneruje — jen vybírá,
+co už bylo řečeno. Samotné stříhání (nahrávka + fotky z WhatsApp + titulky) je zatím samostatný,
+člověkem spouštěný krok (requestni v Claude Code session: „udělej reels z [datum]").
+
+Pozor: `transcript_messages` se ukládá jen u hovorů **po** nasazení této funkce — starší zápisy
+nemají přesné časování a soundbity se vybírají jen z textu.
 
 ## Bezpečnostní poznámky
 
